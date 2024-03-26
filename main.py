@@ -24,9 +24,8 @@
 import os
 from config import Config
 from pyrogram import Client, idle
-import asyncio, logging
-import tgcrypto
-from pyromod import listen
+import asyncio
+import logging
 from logging.handlers import RotatingFileHandler
 
 LOGGER = logging.getLogger(__name__)
@@ -43,13 +42,13 @@ logging.basicConfig(
 )
 
 # Auth Users
-AUTH_USERS = [ int(chat) for chat in Config.AUTH_USERS.split(",") if chat != '']
+AUTH_USERS = [int(chat) for chat in Config.AUTH_USERS.split(",") if chat != '']
 
 # Prefixes 
 prefixes = ["/", "~", "?", "!"]
 
 plugins = dict(root="plugins")
-if __name__ == "__main__" :
+if __name__ == "__main__":
     bot = Client(
         "StarkBot",
         bot_token=Config.BOT_TOKEN,
@@ -57,14 +56,18 @@ if __name__ == "__main__" :
         api_hash=Config.API_HASH,
         sleep_threshold=20,
         plugins=plugins,
-        workers = 50
+        workers=50
     )
-    
+
     async def main():
         await bot.start()
-        bot_info  = await bot.get_me()
+
+        # Synchronize client time
+        await bot.sync_workers()
+
+        bot_info = await bot.get_me()
         LOGGER.info(f"<--- @{bot_info.username} Started (c) STARKBOT --->")
         await idle()
-    
+
     asyncio.get_event_loop().run_until_complete(main())
-    LOGGER.info(f"<---Bot Stopped-->")
+    LOGGER.info(f"<---Bot Stopped--->")
