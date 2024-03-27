@@ -33,11 +33,11 @@ async def Start_msg(bot: stark , m: Message):
            
 
 
-@stark.on_message(filters.command(["restart"]) & ~filters.edited)
+@stark.on_message(filters.command(["restart"]) & ~editable.chat.id)
 async def restart_handler(_, m):
     await m.reply_text("Restarted!", True)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
-@stark.on_message(filters.command(["log"]) & ~filters.edited)
+@stark.on_message(filters.command(["log"]) & ~editable.chat.id)
 async def log_msg(bot: stark , m: Message):   
     await bot.send_document(m.chat.id, "log.txt")
